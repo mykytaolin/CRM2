@@ -1,8 +1,8 @@
 from django.contrib import admin
-from django.urls import path
-from website.views import home_page
+from django.urls import path, include
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_page)
+    path("website/", include("website.urls", namespace="website"))
 ]
