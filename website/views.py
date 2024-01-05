@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from .models import Lead
-from django.http import HttpResponse
 
 
 def lead_list(request):
@@ -8,11 +7,12 @@ def lead_list(request):
     context = {
         "leads": leads
     }
-    return render(request, "lead_list.html", context)
+    return render(request, "website/lead_list.html", context)
 
 
 def lead_detail(request, pk):
-    print(pk)
     lead = Lead.objects.get(id=pk)
-    print(lead)
-    return HttpResponse("here is a detail view")
+    context = {
+        "lead": lead
+    }
+    return render(request, "website/lead_detail.html", context)
