@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Lead, Agent
-from .forms import LeadModelForm
+from .forms import LeadModelForm, LeadForm
 
 
 def lead_list(request):
@@ -11,7 +11,7 @@ def lead_list(request):
     return render(request, "website/lead_list.html", context)
 
 
-def lead_detail(request, pk):
+def lead_update(request, pk):
     lead = Lead.objects.get(id=pk)
     form = LeadForm
     if request.method == "POST":
@@ -67,7 +67,7 @@ def lead_create(request):
     return render(request, "website/lead_create.html", context)
 
 
-def lead_update_view(request, pk):
+def lead_detail(request, pk):
     lead = Lead.objects.get(id=pk)
     context = {
         "lead": lead
