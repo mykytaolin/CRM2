@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <a href="/website"> Return to leads</a>
+    <a href="{% url 'website:lead-detail' lead.pk %}"> Return to {{ lead.first_name }} {{ lead.last_name }}</a>
     <hr/>
     <h1> Update lead: {{ lead.first_name }} {{ lead.last_name }} </h1>
     <form method="post">
