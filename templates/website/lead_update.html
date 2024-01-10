@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+
     <a href="{% url 'website:lead-detail' lead.pk %}"> Return to {{ lead.first_name }} {{ lead.last_name }}</a>
     <hr/>
     <h1> Update lead: {{ lead.first_name }} {{ lead.last_name }} </h1>
@@ -13,5 +10,5 @@
         {{ form }}
         <button type="submit">Submit</button>
     </form>
-</body>
-</html>
+
+{% endblock content %}

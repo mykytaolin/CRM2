@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        .lead {
-            padding: 10px 6px;
-            margin-top: 10px;
-            background-color: #f6f6f6;
-            width: 100%;
-        }
-    </style>
-</head>
+{% extends "base.html" %}
+{% block content %}
 
-<body>
     <a href="{% url 'website:lead-list' %}"> Return to leads</a>
     <hr/>
     <h1> This is the details of {{ lead.first_name }} </h1>
@@ -23,5 +10,4 @@
     <a href="{% url 'website:lead-update' lead.pk %}">Update</a>
     <a href="{% url 'website:lead-delete' lead.pk %}">Delete</a>
 
-</body>
-</html>
+{% endblock content %}
