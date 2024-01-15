@@ -1,11 +1,19 @@
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, reverse
 from .models import Lead, Agent
-from .forms import LeadModelForm, LeadForm
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from .forms import LeadModelForm, LeadForm, CustomBaseUserCreationForm
+from django.views import generic
 
 
-class LandingPageView(TemplateView):
+class SignUpView(generic.CreateView):
+    template_name = "registration/signup.html"
+    form_class = CustomBaseUserCreationForm
+
+    def get_success_url(self):
+        return reverse("login")
+
+
+class LandingPageView(generic.TemplateView):
     template_name = "landing.html"
 
 
@@ -13,7 +21,7 @@ def landing_page(request):
     return render(request, "landing.html")
 
 
-class LeadListView(ListView):
+class LeadListView(generic.ListView):
     template_name = "website/lead_list.html"
     queryset = Lead.objects.all()  # this line equal to  leads = Lead.objects.all()
     context_object_name = "leads"
@@ -27,7 +35,7 @@ def lead_list(request):
     return render(request, "website/lead_list.html", context)
 
 
-class LeadUpdateView(UpdateView):
+class LeadUpdateView(generic.UpdateView):
     template_name = "website/lead_update.html"
     queryset = Lead.objects.all()
     form_class = LeadModelForm
@@ -51,7 +59,7 @@ def lead_update(request, pk):
     return render(request, "website/lead_update.html", context)
 
 
-class LeadDetailView(DetailView):
+class LeadDetailView(generic.DetailView):
     template_name = "website/lead_detail.html"
     queryset = Lead.objects.all()  # this line equal to  leads = Lead.objects.all()
     context_object_name = "lead"
@@ -65,7 +73,7 @@ def lead_detail(request, pk):
     return render(request, "website/lead_detail.html", context)
 
 
-class LeadCreateView(CreateView):
+class LeadCreateView(generic.CreateView):
     template_name = "website/lead_create.html"
     form_class = LeadModelForm
 
@@ -96,7 +104,7 @@ def lead_create(request):
     return render(request, "website/lead_create.html", context)
 
 
-class LeadDeleteView(DeleteView):
+class LeadDeleteView(generic.DeleteView):
     template_name = "website/lead_delete.html"
     queryset = Lead.objects.all()
 
