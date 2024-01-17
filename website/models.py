@@ -26,8 +26,6 @@ class Lead(models.Model):
 
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    '''lead = models.ForeignKey("Agent", models.SET_NULL, null=True) every agent has only one lead ->
-    it's completely wrong'''
     organisation = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
     def __str__(self):
