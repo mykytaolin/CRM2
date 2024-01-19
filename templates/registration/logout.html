@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-    {% if  request.user.is_authenticated %}
-        <h1> Are You sure You want to log out? </h1>
-        <hr/>
-        <a href="{% url 'logout' %}"> Log Out</a>
-    {% endif %}
-{% endblock content %}
