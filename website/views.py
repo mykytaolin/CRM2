@@ -25,8 +25,23 @@ def landing_page(request):
 
 class LeadListView(LoginRequiredMixin, generic.ListView):
     template_name = "website/lead_list.html"
-    queryset = Lead.objects.all()  # this line equal to  leads = Lead.objects.all()
     context_object_name = "leads"
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # initially queryset of leads for all entire organisation
+        if user.is_organiser:  # checking if the organiser
+            queryset = Lead.objects.filter(organisation=user.userprofile)  # checking the organisation by userprofile
+            # which we get by referencing user.userprofile in user model
+        else:
+            queryset = Lead.objects.filter(organisation=user.agent.organisation)  # if we are an agents
+            # we can access to agent by request.user and pole organisation which agent model consist
+
+            # filtering the leads for the current agent
+            queryset = queryset.filter(agent__user=user)
+
+        return queryset
 
 
 def lead_list(request):
@@ -39,11 +54,14 @@ def lead_list(request):
 
 class LeadUpdateView(OrganiserAndLoginRequiredMixin, generic.UpdateView):
     template_name = "website/lead_update.html"
-    queryset = Lead.objects.all()
     form_class = LeadModelForm
 
     def get_success_url(self):
         return reverse("website:lead-update")
+
+    def get_queryset(self):
+        user = self.request.user
+        return Lead.objects.filter(organisation=user.userprofile)
 
 
 def lead_update(request, pk):
@@ -63,8 +81,23 @@ def lead_update(request, pk):
 
 class LeadDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "website/lead_detail.html"
-    queryset = Lead.objects.all()  # this line equal to  leads = Lead.objects.all()
     context_object_name = "lead"
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # initially queryset of leads for all entire organisation
+        if user.is_organiser:  # checking if the organiser
+            queryset = Lead.objects.filter(organisation=user.userprofile)  # checking the organisation by userprofile
+            # which we get by referencing user.userprofile in user model
+        else:
+            queryset = Lead.objects.filter(organisation=user.agent.organisation)  # if we are an agents
+            # we can access to agent by request.user and pole organisation which agent model consist
+
+            # filtering the leads for the current agent
+            queryset = queryset.filter(agent__user=user)
+
+        return queryset
 
 
 def lead_detail(request, pk):
@@ -92,6 +125,22 @@ class LeadCreateView(OrganiserAndLoginRequiredMixin, generic.CreateView):
         )
         return super(LeadCreateView, self).form_valid(form)
 
+    def get_queryset(self):
+        user = self.request.user
+
+        # initially queryset of leads for all entire organisation
+        if user.is_organiser:  # checking if the organiser
+            queryset = Lead.objects.filter(organisation=user.userprofile)  # checking the organisation by userprofile
+            # which we get by referencing user.userprofile in user model
+        else:
+            queryset = Lead.objects.filter(organisation=user.agent.organisation)  # if we are an agents
+            # we can access to agent by request.user and pole organisation which agent model consist
+
+            # filtering the leads for the current agent
+            queryset = queryset.filter(agent__user=user)
+
+        return queryset
+
 
 def lead_create(request):
     form = LeadModelForm()
@@ -108,10 +157,25 @@ def lead_create(request):
 
 class LeadDeleteView(OrganiserAndLoginRequiredMixin, generic.DeleteView):
     template_name = "website/lead_delete.html"
-    queryset = Lead.objects.all()
 
     def get_success_url(self):
         return reverse("website:lead-list")
+
+    def get_queryset(self):
+        user = self.request.user
+
+        # initially queryset of leads for all entire organisation
+        if user.is_organiser:  # checking if the organiser
+            queryset = Lead.objects.filter(organisation=user.userprofile)  # checking the organisation by userprofile
+            # which we get by referencing user.userprofile in user model
+        else:
+            queryset = Lead.objects.filter(organisation=user.agent.organisation)  # if we are an agents
+            # we can access to agent by request.user and pole organisation which agent model consist
+
+            # filtering the leads for the current agent
+            queryset = queryset.filter(agent__user=user)
+
+        return queryset
 
 
 def lead_delete(request, pk):
