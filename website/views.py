@@ -32,16 +32,32 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
 
         # initially queryset of leads for all entire organisation
         if user.is_organiser:  # checking if the organiser
-            queryset = Lead.objects.filter(organisation=user.userprofile)  # checking the organisation by userprofile
+            queryset = Lead.objects.filter(organisation=user.userprofile,
+                                           agent__isnull=False)  # checking the organisation by userprofile
             # which we get by referencing user.userprofile in user model
         else:
-            queryset = Lead.objects.filter(organisation=user.agent.organisation)  # if we are an agents
+            queryset = Lead.objects.filter(organisation=user.agent.organisation,
+                                           agent__isnull=False)  # if we are an agents
             # we can access to agent by request.user and pole organisation which agent model consist
 
             # filtering the leads for the current agent
             queryset = queryset.filter(agent__user=user)
 
         return queryset
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(LeadListView, self).get_context_data(**kwargs)
+        if user.is_organiser:
+            queryset = Lead.objects.filter(
+                organisation=user.userprofile,
+                agent__isnull=True,
+            )
+            context.update({
+                "unassigned_leads": queryset,
+            })
+        return context
+
 
 
 def lead_list(request):
