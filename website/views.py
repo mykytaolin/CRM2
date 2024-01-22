@@ -1,7 +1,7 @@
 from django.core.mail import send_mail
 from django.shortcuts import render, redirect, reverse
-from .models import Lead, Agent
-from .forms import LeadModelForm, LeadForm, CustomBaseUserCreationForm
+from .models import Lead, Agent, Category
+from .forms import LeadModelForm, LeadForm, CustomBaseUserCreationForm, AssignAgentForm
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 from agents.mixins import OrganiserAndLoginRequiredMixin
@@ -57,7 +57,6 @@ class LeadListView(LoginRequiredMixin, generic.ListView):
                 "unassigned_leads": queryset,
             })
         return context
-
 
 
 def lead_list(request):
@@ -198,6 +197,46 @@ def lead_delete(request, pk):
     lead = Lead.objects.get(id=pk)
     lead.delete()
     return redirect("/website")
+
+
+class AssignAgentView(OrganiserAndLoginRequiredMixin, generic.FormView):
+    template_name = "website/assign_agent.html"
+    form_class = AssignAgentForm
+
+    def get_form_kwargs(self, **kwargs):  # clean and easy way to pass the args into the form
+        kwargs = super(AssignAgentView, self).get_form_kwargs(**kwargs)
+        kwargs.update({
+            "request": self.request
+        })
+        return kwargs
+
+    def form_valid(self, form):
+        agent = (form.cleaned_data["agent"])
+        lead = Lead.objects.get(id=self.kwargs["pk"])
+        lead.agent = agent
+        lead.save()
+        return super(AssignAgentView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse("website:lead-list")
+
+
+class CategoryListView(LoginRequiredMixin, generic.ListView):
+    template_name = "website/category_list.html"
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_organiser:
+            queryset = Category.objects.filter(
+                organisation=user.userprofile
+            )
+        else:
+            queryset = Category.objects.filter(
+                organisation=user.agent.organisation
+            )
+
+        return queryset
 
 
 # def lead_update(request, pk):
