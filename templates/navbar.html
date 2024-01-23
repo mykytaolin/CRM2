@@ -27,7 +27,7 @@
             Logged in as: {{ request.user.username }}
                 <form class="ml-3 hover:text-gray-900"  id="logout-form" action="{% url "logout" %}" method="POST">
                     {% csrf_token %}
-                    <button class="ml-3 hover:text-gray-900" type="submit">
+                    <button type="submit" class="ml-3 hover:text-gray-900">
                         Log out
                     </button>
                 </form>
