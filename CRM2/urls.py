@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.views import (
  LoginView, LogoutView,
- PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
-)
+ PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView)
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
