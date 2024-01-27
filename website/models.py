@@ -23,9 +23,9 @@ class Lead(models.Model):
     agent = models.ForeignKey("Agent", null=True, blank=True, on_delete=models.SET_NULL)  # every lead have just 1 agent
     category = models.ForeignKey("Category", related_name="leads", null=True, blank=True, on_delete=models.SET_NULL)
     date_added = models.DateTimeField(auto_now_add=True)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=20)
-    description = models.TextField()
+    email = models.EmailField(null=True)
+    phone_number = models.CharField(max_length=20, null=True)
+    description = models.TextField(null=True)
 
 
     def __str__(self):
