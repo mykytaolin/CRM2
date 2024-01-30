@@ -1,0 +1,13 @@
+#logout-form {
+    display: inline;
+}
+
+
+#logout-form button {
+    padding: 0;
+    color: rgba(255, 255, 255, 0.5);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
